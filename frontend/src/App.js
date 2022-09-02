@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom"
-import Login from './components/Login.js';
-import Signup from './components/Signup.js'
+import Login from './pages/Login.js';
+import Signup from './pages/Signup.js'
 import './globals.css'
 
 
