@@ -5,6 +5,7 @@ const User = new Schema(
     email: {
       type: String,
       required: true,
+      lowercase: true,
       unique: true,
     },
     password: {

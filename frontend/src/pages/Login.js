@@ -8,6 +8,7 @@ import loginSchema from '../validation/loginSchema';
 
 export default function Login() {
 const [showPassword, setShowPassword] = useState(false)
+const [error, setError] = useState(null)
 
 const handleClickShowPassword = () => {
   setShowPassword(!showPassword)
@@ -28,9 +29,10 @@ useEffect(() => {}, [showPassword])
 
   return (
     <Container maxWidth="sm" sx={{display:'flex',alignItems:'center',minHeight: '100vh'}}>
-      <Box padding={{xs: 4, sm: 6, md: 8}}  boxShadow={"rgba(0, 0, 0, 0.08) 0px 4px 12px;"} borderRadius={3} >
+      <Box padding={{xs: 2, sm: 6, md: 8}}  boxShadow={{xs: "none", sm: "rgba(0, 0, 0, 0.08) 0px 4px 12px;"}} borderRadius={3} >
         <Typography variant='h3' mb={2}>Log in</Typography>
-        <Typography variant='subtitle1'mb={10} color="#717172">Enter your credentials to access your account.</Typography>
+        <Typography variant='subtitle1'mb={5} color="#717172">Enter your credentials to access your account.</Typography>
+        {error && <Box bgcolor="#F8D7DA" p={2.2} borderRadius={1} color="#721C24"><Typography>{error}</Typography></Box>}
           <Formik
           initialValues={formik.initialValues}>
             <Form action="/api/users" method="POST" onSubmit={formik.handleSubmit}>

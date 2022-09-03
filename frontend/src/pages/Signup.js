@@ -11,6 +11,7 @@ export default function Signup() {
 const API_URL = "/api/"
 const [showPassword, setShowPassword] = useState(false)
 const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+const [error, setError] = useState(null)
 
 const handleClickShowPassword = () => {
   setShowPassword(!showPassword)
@@ -19,7 +20,7 @@ const handleClickShowConfirmPassword = () => {
   setShowConfirmPassword(!showConfirmPassword)
 }
 const navigate = useNavigate()
-useEffect(() => {}, [showPassword, showConfirmPassword])
+useEffect(() => {}, [showPassword, showConfirmPassword, error])
 
     const formik = useFormik({
       initialValues: {
@@ -29,12 +30,13 @@ useEffect(() => {}, [showPassword, showConfirmPassword])
       },
       validationSchema: loginSchema,
       onSubmit: async (values, resetForm) => {
+        setError(null)
         try{
-          const response = await axios.post(API_URL + "register", {email: values.email, password: values.password})
-          console.log(response)
+          const result = await axios.post(API_URL + "register", {email: values.email, password: values.password})
+          console.log(result)
         }
         catch(err){
-          console.log(err)
+          setError(err.response.data.message)
         }
         resetForm()
       }
@@ -44,11 +46,13 @@ useEffect(() => {}, [showPassword, showConfirmPassword])
     <Container maxWidth="sm" sx={{display:'flex',alignItems:'center',minHeight: '100vh'}}>
       <Box padding={{xs: 4, sm: 6, md: 8}}  boxShadow={"rgba(0, 0, 0, 0.08) 0px 4px 12px;"} borderRadius={3} >
         <Typography variant='h3' mb={2}>Sign up</Typography>
-        <Typography variant='subtitle1'mb={10} color="#717172">Enter your credentials to access your account.</Typography>
+        <Typography variant='subtitle1'mb={5} color="#717172">Enter your credentials to create new account.</Typography>
+         {error && <Box bgcolor="#F8D7DA" p={2.2} borderRadius={1} color="#721C24"><Typography>{error}</Typography></Box>}
           <Formik
-          initialValues={formik.initialValues} >
-            <Form action="/api/users" method="POST" onSubmit={formik.handleSubmit}>
+          initialValues={formik.initialValues}>
+            <Form action="/api/users" method="POST" onSubmit={formik.handleSubmit} >
               <Field
+              sx={{marginTop: error ? "2rem" : "1rem"}}
               id="email"
               name="email"
               label="Email"
