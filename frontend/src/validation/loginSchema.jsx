@@ -1,5 +1,5 @@
 
-import { object, string, ref } from 'yup';
+import { object, string } from 'yup';
 const loginSchema = object({
     email: string()
     .required("Please enter your email.")
@@ -10,8 +10,5 @@ const loginSchema = object({
     .required("Please enter your password")
     .min(8, "Password should be atleast 8 characters long.")
     .max(250, "Password should contain less than 250 characters."),
-    passwordConfirmation: string()
-     .oneOf([ref('password')], 'Passwords must match.')
-     .required("Password confirmation is required.")
   })
   export default loginSchema
