@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import { Box, Stack, TextField, Container, Button, Typography, InputAdornment, IconButton, Checkbox, FormControlLabel, Divider} from '@mui/material';
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Visibility from '@mui/icons-material/Visibility';
-import { useFormik, Field, Form, Formik } from 'formik';
+import { useFormik, Field, Form, Formik, replace } from 'formik';
 import loginSchema from '../validation/loginSchema';
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 export default function Login() {
 const API_URL = "/api/auth/"
 const [showPassword, setShowPassword] = useState(false)
 const [error, setError] = useState(null)
+
+const navigate = useNavigate()
 
 const handleClickShowPassword = () => {
   setShowPassword(!showPassword)
@@ -20,7 +23,9 @@ const handleClickShowPassword = () => {
 //   'Authorization': 'JWT fefege...'
 // }
 
-useEffect(() => {}, [showPassword, error])
+useEffect(() => {
+  
+}, [showPassword, error])
 
     const formik = useFormik({
       initialValues: {
@@ -28,15 +33,12 @@ useEffect(() => {}, [showPassword, error])
         password: '',
       },
       validationSchema: loginSchema,
-      onSubmit: async (values) => {
-        setError(null)
+      onSubmit: async (values, {resetForm}) => {
+        // setError(null)
         try{
-          //  { headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer'}}
-            axios.post(API_URL + "login", { email: values.email, password: values.password }).then((result) => {
-              console.log(result)
-
-            })
-          
+            const result = await axios.post(API_URL + "login", { email: values.email, password: values.password })
+            resetForm({email: "", password: ""})
+            // navigate('/dashboard')
         }
         catch(err){
           setError(err.response.data.message)

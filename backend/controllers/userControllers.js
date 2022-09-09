@@ -23,10 +23,10 @@ const loginUser =  async (req, res, next) => {
         const passwordsMatch = await bcrypt.compare(req.body.password, userFound.password)
 
         if(userFound && passwordsMatch){
+
            const token = await newToken(userFound._id)
-            // const token = await jwt.sign({ id: userFound._id }, process.env.JWT_ACCESS_TOKEN, { expiresIn: 86400 })
-            return res.cookie("token", token , { maxAge: 2 * 60 * 60 * 1000, httpOnly: true, sameSite: true }).json({ message: "User logged in" })
-            // return res.json({message: "User logged in", token: token})
+           res.cookie("token", token , { maxAge: 2 * 60 * 60 * 1000, httpOnly: true, sameSite: true }).json({ message: "User logged in" })
+
         }
         else{
             res.status(404).json({ message: "Incorrect email or password." })
